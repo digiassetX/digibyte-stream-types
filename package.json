@@ -1,0 +1,16 @@
+{
+  "name": "digiassetx-digibyte-stream-types",
+  "version": "1.0.0",
+  "description": "type data for digiassetX streaming service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Matthew Cornelisse",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digiassetX/digibyte-stream-types"
+  }
+}
