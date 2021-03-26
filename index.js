@@ -114,6 +114,12 @@
  */
 
 /**
+ * kyc can not use both allow and ban
+ * can not use both vote and expires(vote.cutoff is same as expires)
+ *
+ * vote.options is always outputted in object form even if input is array of strings only
+ * vote.options can not mix the 2 forms.
+ *
  * @typedef {{
  *     rewritable: boolean,
  *     signers:    {
@@ -126,10 +132,11 @@
  *         ban:      string[]?
  *     }|boolean?,
  *     vote:    {
- *         options: Object:string,
+ *         options: string[]|{address:string,label:string}[],
  *         movable: boolean,
- *         cutoff:  int
- *     }?
+ *         cutoff:  int?
+ *     }?,
+ *     expires:     int?
  * }} AssetRules
  */
 
@@ -243,6 +250,7 @@
 
 /**
  * key=assetId
+ *
  * @typedef {{
  *     assetId:     string,
  *     issuer:      string,
@@ -260,6 +268,11 @@
  *     }[],
  *     rules:       AssetRules?,
  *     txs:         AssetTxRecord[],
+ *     votes:       {
+ *                      label:      string,
+ *                      address:    string,
+ *                      count:      int
+*                   }[]?,
  *     firstUsed:   int,
  *     lastUsed:    int
  * }} AssetData
