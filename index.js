@@ -36,10 +36,14 @@
  */
 
 /**
+ * cid only present on non aggregable assets
+ * rules is either true or undefined
+ *
  * @typedef {{
  *     assetId:     string,
  *     amount:      string|BigInt,
  *     decimals:    int,
+ *     cid:         string?,
  *     rules:       boolean=false
  * }} AssetCount
  */
@@ -120,8 +124,14 @@
  * vote.options is always outputted in object form even if input is array of strings only
  * vote.options can not mix the 2 forms.
  *
+ * effective is never set by issuer.  It is set based on height issuance is added to chain.
+ * Old rules are valid for 240 blocks after rule change.  transfers made in the overlapping time are valid if they follow
+ * either set of rules
+ *
+ *
  * @typedef {{
- *     rewritable: boolean,
+ *     rewritable:  boolean,
+ *     effective:   int,
  *     signers:    {
  *         required:   int?,
  *         list:   Object<int>
@@ -200,18 +210,18 @@
  *     deposit:     DepositWithdraw,
  *     withdraw:    DepositWithdraw?,
  *     assets:      Object<string|BigInt>,
- *     kyc:         KycState?
+ *     kyc:         KycState?,
+ *     issuance:    string[]
  * }} AddressData
  */
 
-/** TODO
- * key={Address}_utxo
+/**
+ * key={Address}_utxos
  * @typedef {{
  *     txid:        string,
  *     vout:        int,
  *     value:       string|BigInt,
- *     hex:         string,
- *     assets:      [AssetCount]
+ *     assets:      AssetCount[]?
  * }[]} AddressUtxoData
  */
 
@@ -266,7 +276,7 @@
  *         txid:    string,
  *         cid:     string
  *     }[],
- *     rules:       AssetRules?,
+ *     rules:       AssetRules[]?,
  *     txs:         AssetTxRecord[],
  *     votes:       {
  *                      label:      string,
@@ -274,7 +284,8 @@
  *                      count:      int
 *                   }[]?,
  *     firstUsed:   int,
- *     lastUsed:    int
+ *     lastUsed:    int,
+ *     expired:     boolean=false?
  * }} AssetData
  */
 
