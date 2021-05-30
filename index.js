@@ -3,7 +3,7 @@
  *         country: string,
  *         name:    string?,
  *         hash:    string?,
- *         revoked: int
+ *         revoked: int?
  * }} KycState
  */
 
@@ -128,6 +128,8 @@
  * Old rules are valid for 240 blocks after rule change.  transfers made in the overlapping time are valid if they follow
  * either set of rules
  *
+ * deflate requires that many be burned at every transfer
+ *
  *
  * @typedef {{
  *     rewritable:  boolean,
@@ -146,7 +148,13 @@
  *         movable: boolean,
  *         cutoff:  int?
  *     }?,
- *     expires:     int?
+ *     currency:    string|{
+ *         address: string,
+ *         index:   int,
+ *         name:    string
+ *     }?,
+ *     expires:     int?,
+ *     deflate:     int|BigInt?
  * }} AssetRules
  */
 
@@ -282,10 +290,11 @@
  *                      label:      string,
  *                      address:    string,
  *                      count:      int
-*                   }[]?,
+ *                   }[]?,
  *     firstUsed:   int,
  *     lastUsed:    int,
- *     expired:     boolean=false?
+ *     expired:     boolean=false?,
+ *     kyc:         KycState?
  * }} AssetData
  */
 
@@ -340,10 +349,3 @@
  *         data:    string|boolean|int
  *     }[]} TxOpReturnData
  */
-
-/**
- * @typedef {
- *     ?
- * }
- */
-let GroupData;  //TODO
