@@ -273,7 +273,7 @@
  *     assetId:     string,
  *     issuer:      string,
  *     locked:      boolean,
- *     aggregation: int,
+ *     aggregation: "aggregatable"|"hybrid"|"dispersed",
  *     divisibility:int,
  *     holders:     Object<string|BigInt>,
  *     supply:  {
