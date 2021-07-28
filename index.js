@@ -1,32 +1,5 @@
 /**
  * @typedef {{
- *         country: string,
- *         name:    string?,
- *         hash:    string?,
- *         revoked: int?
- * }} KycState
- */
-
-/**
- * @typedef {{
- *     height:      int,
- *     hash:        string,
- *     last:        int
- * }} State
- */
-
-
-/**
- * @typedef {{
- *     Bucket:      string,
- *     Key:         string
- * }} BucketParam
- */
-
-
-
-/**
- * @typedef {{
  *     asm:         string,
  *     hex:         string,
  *     reqSigs:     int,
@@ -43,34 +16,38 @@
  *     assetId:     string,
  *     amount:      string|BigInt,
  *     decimals:    int,
- *     cid:         string?,
- *     rules:       boolean=false
+ *     cid:         ?string,
+ *     rules:       ?boolean
  * }} AssetCount
  */
 
 /**
+ * coinbase inputs only contain - coinbase, and sequence
+ * non coinbase inputs contain everything but coinbase(assets may or may not be present)
  * @typedef {{
  *     sequence:    int,
- *     value:       string|BigInt,
  *
- *     coinbase:    string?,
+ *     coinbase:    ?string,
  *
- *     txid:        string,
- *     vout:        int,
- *     source:      int,
- *     scriptSig:   {asm:string,hex:string},
- *     scriptPubKey:ScriptPubKey?,
- *     assets:      AssetCount[]?
+ *     value:       ?string|BigInt,
+ *     txid:        ?string,
+ *     vout:        ?int,
+ *     source:      ?int,
+ *     scriptSig:   ?{asm:string,hex:string},
+ *     scriptPubKey:?ScriptPubKey,
+ *
+ *     assets:      ?AssetCount[]
  * }} Vin
  */
 
 /**
+ * Spent is  the height the output was spent.  Is not present if not spent
  * @typedef {{
  *     value:       string|BigInt,
  *     vout:        int,
- *     spent:       int?,
+ *     spent:       ?int,
  *     scriptPubKey:ScriptPubKey,
- *     assets:      AssetCount[]?
+ *     assets:      ?AssetCount[]
  * }} Vout
  */
 
@@ -81,14 +58,14 @@
  *     vout:        int,
  *     value:       string|BigInt,
  *     scriptPubKey:ScriptPubKey,
- *     assets:      AssetCount[]?
+ *     assets:      ?AssetCount[]
  * }} UTXO
  */
 
 /**
  * change & balance are BigInt but saved as string
  * @typedef {{
- *     assetId:     string?,
+ *     assetId:     ?string,
  *     time:        int,
  *     height:      int,
  *     txid:        string,
@@ -134,27 +111,27 @@
  * @typedef {{
  *     rewritable:  boolean,
  *     effective:   int,
- *     signers:    {
- *         required:   int?,
- *         list:   Object<int>
- *     }?,
- *     royalties:  Object<int|BigInt>?,
- *     kyc:    {
- *         allow:    string[]?,
- *         ban:      string[]?
- *     }|boolean?,
- *     vote:    {
+ *     signers:     ?{
+ *         required:    ?int,
+ *         list:        Object<int>
+ *     },
+ *     royalties:  ?Object<int|BigInt>,
+ *     kyc:    ?{
+ *         allow:    ?string[],
+ *         ban:      ?string[]
+ *     }|boolean,
+ *     vote:    ?{
  *         options: string[]|{address:string,label:string}[],
  *         movable: boolean,
- *         cutoff:  int?
- *     }?,
- *     currency:    string|{
+ *         cutoff:  ?int
+ *     },
+ *     currency:    ?string|{
  *         address: string,
  *         index:   int,
  *         name:    string
- *     }?,
- *     expires:     int?,
- *     deflate:     int|BigInt?
+ *     },
+ *     expires:     ?int,
+ *     deflate:     ?int|BigInt
  * }} AssetRules
  */
 
@@ -166,6 +143,17 @@
 ██╔═██╗   ╚██╔╝  ██║
 ██║  ██╗   ██║   ╚██████╗
 ╚═╝  ╚═╝   ╚═╝    ╚═════╝
+ */
+
+/**
+ * Eiter name or hash will always be present but not both.
+ * Revoked is the block height the KYC status was revoked and is only present if the account holder signals there wallet was hacked.
+ * @typedef {{
+ *         country: string,
+ *         name:    ?string,
+ *         hash:    ?string,
+ *         revoked: ?int
+ * }} KycState
  */
 
 /**
@@ -207,7 +195,7 @@
  */
 
 /**
- * key=address
+ * Key=address
  * @typedef {{
  *     address:     string,
  *     index:       int,
@@ -216,25 +204,25 @@
  *     lastUsed:    int,
  *     txs:         AddressTxRecord[],
  *     deposit:     DepositWithdraw,
- *     withdraw:    DepositWithdraw?,
+ *     withdraw:    ?DepositWithdraw,
  *     assets:      Object<string|BigInt>,
- *     kyc:         KycState?,
- *     issuance:    string[]
+ *     kyc:         ?KycState,
+ *     issuance:    ?string[]
  * }} AddressData
  */
 
 /**
- * key={Address}_utxos
+ * Key={Address}_utxos
  * @typedef {{
  *     txid:        string,
  *     vout:        int,
  *     value:       string|BigInt,
- *     assets:      AssetCount[]?
+ *     assets:      ?AssetCount[]
  * }[]} AddressUtxoData
  */
 
 /**
- * key=height or hash
+ * Key=height or hash
  * @typedef {{
  *      hash:           string,
  *      strippedsize:   int,
@@ -248,14 +236,14 @@
  *      difficulty:     Number,
  *      nTx:            int,
  *      previousblockhash: string,
- *      nextblockhash:  string?,
+ *      nextblockhash:  ?string,
  *      tx:             TxData[]
  * }} DigiByteBlockData
  * */
 
 
 /**
- * key=txid
+ * Key=txid
  * @typedef {{
  *     txid:       string,
  *     vin:        Vin[],
@@ -267,7 +255,7 @@
  */
 
 /**
- * key=assetId
+ * Key=assetId
  *
  * @typedef {{
  *     assetId:     string,
@@ -279,28 +267,28 @@
  *     supply:  {
  *         initial: string|BigInt,
  *         current: string|BigInt
- *     }
+ *     },
  *     metadata:    {
  *         txid:    string,
  *         cid:     string
  *     }[],
- *     rules:       AssetRules[]?,
+ *     rules:       ?AssetRules[],
  *     txs:         AssetTxRecord[],
- *     votes:       {
+ *     votes:       ?{
  *                      label:      string,
  *                      address:    string,
  *                      count:      int
- *                   }[]?,
+ *                   }[],
  *     firstUsed:   int,
  *     lastUsed:    int,
- *     expired:     boolean=false?,
- *     kyc:         KycState?
+ *     expired:     ?boolean,
+ *     kyc:         ?KycState
  * }} AssetData
  */
 
 
 /**
- * key='index_block_'+floor(height/1000)+'000'
+ * Key=`index_block_${Math.floor(height/1000)}000`
  * @typedef {
  *     {
  *         height:      int,
@@ -313,7 +301,7 @@
  */
 
 /**
- * key='index_asset_'+floor(height/1000)+'000'
+ * Key=`index_asset_${Math.floor(height/1000)}000`
  * @typedef {
  *     {
  *         assetId:     string,
@@ -326,13 +314,13 @@
  */
 
 /**
- * key='height'
+ * Key='height'
  * Returns the current height synced
  * @typedef {int} HeightData
  */
 
 /**
- * key=helpers.dataKey('coinbase',height)
+ * Key=`data_coinbase_${Math.floor(height/100000)}00000`
  * @typedef {{
  *         height:  int,
  *         hash:    string,
@@ -341,7 +329,7 @@
  */
 
 /**
- * key=helpers.dataKey('tx',height)
+ * Key=`data_tx_${Math.floor(height/100000)}00000`
  * @typedef {{
  *         height:  int,
  *         txid:    string,
