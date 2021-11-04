@@ -1,6 +1,6 @@
 {
   "name": "digiassetx-digibyte-stream-types",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "type data for digiassetX streaming service",
   "main": "index.js",
   "scripts": {
