@@ -123,14 +123,14 @@
  *     vote:    ?{
  *         options: string[]|{address:string,label:string}[],
  *         movable: boolean,
- *         cutoff:  ?int
+ *         cutoff:  ?int|BigInt
  *     },
  *     currency:    ?string|{
  *         address: string,
  *         index:   int,
  *         name:    string
  *     },
- *     expires:     ?int,
+ *     expires:     ?int|BigInt,
  *     deflate:     ?int|BigInt
  * }} AssetRules
  */
